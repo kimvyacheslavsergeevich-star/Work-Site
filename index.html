@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вячеслав Ким | Разработка сайтов под ключ</title>
+    <style>
+        :root {
+            --bg-color: #080808;
+            --text-main: #ffffff;
+            --text-muted: #888888;
+            --accent-color: #ff3b30;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+            padding: 60px 0;
+        }
+
+        /* Фоновая сетка */
+        .grid-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px), 
+                              linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            width: 90%;
+            max-width: 1100px;
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        /* Левая сторона: Аватар */
+        .left-side {
+            display: flex;
+            justify-content: center;
+        }
+
+        .avatar-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 380px;
+            aspect-ratio: 1 / 1;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .avatar {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%);
+            transition: filter 0.6s cubic-bezier(0.165, 0.84, 0.44, 1), transform 0.6s ease;
+        }
+
+        .avatar-wrapper:hover .avatar {
+            filter: grayscale(0%);
+            transform: scale(1.05);
+        }
+
+        /* Правая сторона: Текст и Услуги */
+        .right-side {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .name {
+            font-size: clamp(40px, 6vw, 76px);
+            font-weight: 900;
+            line-height: 0.9;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            margin-bottom: 24px;
+        }
+
+        .name span {
+            color: var(--accent-color);
+        }
+
+        .role {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-main);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 28px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .role::before {
+            content: '';
+            display: inline-block;
+            width: 30px;
+            height: 1px;
+            background-color: var(--accent-color);
+        }
+
+        .bio {
+            font-size: 16px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 32px;
+            max-width: 480px;
+        }
+
+        /* --- Прайс-лист --- */
+        .price-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 36px;
+            max-width: 540px;
+        }
+
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .price-item:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .price-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .price-title {
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .price-meta {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .price-meta span {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .price-action .btn-small {
+            background: transparent;
+            color: var(--text-main);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .price-action .btn-small:hover {
+            background: var(--text-main);
+            color: #000;
+            border-color: var(--text-main);
+        }
+
+        .actions {
+            display: flex;
+            gap: 20px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 20px;
+            background: transparent;
+            color: var(--text-main);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            text-align: center;
+        }
+
+        .btn:hover {
+            background-color: var(--text-main);
+            color: #000;
+            border-color: var(--text-main);
+        }
+
+        .btn-primary {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        .btn-primary:hover {
+            background-color: transparent;
+            color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        /* Премиальное модальное окно */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: #000;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 50px 40px;
+            max-width: 450px;
+            width: 90%;
+            text-align: left;
+            transform: translateY(30px);
+            transition: transform 0.4s ease;
+        }
+
+        .modal.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            margin-bottom: 16px;
+            color: var(--text-main);
+        }
+
+        .modal-text {
+            font-size: 15px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+
+        .modal-text a {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: bold;
+            transition: opacity 0.2s ease;
+        }
+
+        .modal-text a:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+        }
+
+        .modal-close-btn {
+            background: var(--text-main);
+            color: #000;
+            border: none;
+            padding: 14px 28px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+        }
+
+        .modal-close-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* Адаптивная верстка */
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                text-align: center;
+            }
+            .avatar-wrapper {
+                margin: 0 auto;
+            }
+            .role {
+                justify-content: center;
+            }
+            .bio {
+                margin: 0 auto 32px auto;
+            }
+            .price-list {
+                margin: 0 auto 36px auto;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="grid-bg"></div>
+
+    <div class="container">
+        <!-- Левая сторона (Аватар) -->
+        <div class="left-side">
+            <div class="avatar-wrapper">
+                <img class="avatar" src="avatar.png" alt="Ким Вячеслав">
+            </div>
+        </div>
+        
+        <!-- Правая сторона (Текст и Услуги) -->
+        <div class="right-side">
+            <p class="role">Freelancer / Web Dev</p>
+            <h1 class="name">Ким<br>Вячеслав<span>.</span></h1>
+            
+            <p class="bio">
+                Профессиональная разработка веб-сайтов любой сложности. 
+                5+ лет опыта. Помогаю бизнесу расти через продуманный UI/UX и чистый код.
+            </p>
+
+            <!-- Прайс-лист -->
+            <div class="price-list">
+                <div class="price-item">
+                    <div class="price-info">
+                        <p class="price-title">Визитка / Landing Page</p>
+                        <p class="price-meta">от <span>25 000 ₽</span> • от <span>5 дней</span></p>
+                    </div>
+                    <div class="price-action">
+                        <button class="btn-small" onclick="openOrderModal('Визитка / Landing Page', '25 000 ₽', '5 дней')">Заказать</button>
+                    </div>
+                </div>
+
+                <div class="price-item">
+                    <div class="price-info">
+                        <p class="price-title">Сайт Игра-Аркада</p>
+                        <p class="price-meta">от <span>45 000 ₽</span> • от <span>10 дней</span></p>
+                    </div>
+                    <div class="price-action">
+                        <button class="btn-small" onclick="openOrderModal('Сайт Игра-Аркада', '45 000 ₽', '10 дней')">Заказать</button>
+                    </div>
+                </div>
+
+                <div class="price-item">
+                    <div class="price-info">
+                        <p class="price-title">Сайт "Под ключ"</p>
+                        <p class="price-meta">от <span>150 000 ₽</span> • от <span>20 дней</span></p>
+                    </div>
+                    <div class="price-action">
+                        <button class="btn-small" onclick="openOrderModal('Сайт под ключ', '150 000 ₽', '20 дней')">Заказать</button>
+                    </div>
+                </div>
+
+                <div class="price-item">
+                    <div class="price-info">
+                        <p class="price-title">Верстка из Figma</p>
+                        <p class="price-meta">от <span>15 000 ₽</span> • от <span>3 дней</span></p>
+                    </div>
+                    <div class="price-action">
+                        <button class="btn-small" onclick="openOrderModal('Верстка из Figma', '15 000 ₽', '3 дней')">Заказать</button>
+                    </div>
+                </div>
+
+                <div class="price-item">
+                    <div class="price-info">
+                        <p class="price-title">Оптимизация скорости</p>
+                        <p class="price-meta">от <span>10 000 ₽</span> • от <span>2 дней</span></p>
+                    </div>
+                    <div class="price-action">
+                        <button class="btn-small" onclick="openOrderModal('Оптимизация скорости', '10 000 ₽', '2 дней')">Заказать</button>
+                    </div>
+                </div>
+
+                <div class="price-item">
+                    <div class="price-info">
+                        <p class="price-title">Техподдержка и администрирование</p>
+                        <p class="price-meta">от <span>5 000 ₽</span> • <span>30 дней</span></p>
+                    </div>
+                    <div class="price-action">
+                        <button class="btn-small" onclick="openOrderModal('Техподдержка и администрирование', '5 000 ₽', '30 дней')">Заказать</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Кнопки действий -->
+            <div class="actions">
+                <button class="btn btn-primary" onclick="openContactModal()">Связаться</button>
+                <button class="btn" onclick="openModal('Мое портфолио', 'Посмотрите примеры моих работ и прайс-лист на бирже FL.ru:<br><br><a href=\'https://fl.ru\' target=\'_blank\'>Открыть профиль на FL.ru</a>')">Работы</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно -->
+    <div id="infoModal" class="modal" onclick="closeModalOutside(event)">
+        <div class="modal-content">
+            <h3 id="modalTitle" class="modal-title">Заголовок</h3>
+            <p id="modalText" class="modal-text">Текст</p>
+            <button class="modal-close-btn" onclick="closeModal()">Закрыть</button>
+        </div>
+    </div>
+
+    <script>
+        function openModal(title, htmlText) {
+            const modal = document.getElementById('infoModal');
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalText').innerHTML = htmlText;
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('active'), 10);
+        }
+
+        function openOrderModal(serviceName, price, terms) {
+            const text = `Вы выбрали услугу: <strong>${serviceName}</strong>.<br>` +
+                         `Стоимость: от <strong>${price}</strong>.<br>` +
+                         `Срок: от <strong>${terms}</strong>.<br><br>` +
+                         `Напишите мне напрямую для обсуждения деталей заказа:<br>` +
+                         `<a href='https://t.me' target='_blank'>Telegram: @KimVyacheslavSergeevich</a><br>` +
+                         `<a href='mailto:kimvyacheslavsergeevich@gmail.com'>Email: kimvyacheslavsergeevich@gmail.com</a>`;
+            openModal('Оформить заказ', text);
+        }
+
+        function openContactModal() {
+            const text = `Свяжитесь со мной напрямую для бесплатной консультации:<br><br>` +
+                         `Telegram: <a href='https://t.me' target='_blank'>@KimVyacheslavSergeevich</a><br><br>` +
+                         `Email: <a href='mailto:kimvyacheslavsergeevich@gmail.com'>kimvyacheslavsergeevich@gmail.com</a>`;
+            openModal('Контакты', text);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('infoModal');
+            modal.classList.remove('active');
+            setTimeout(() => modal.style.display = 'none', 400);
+        }
+
+        function closeModalOutside(event) {
+            const modal = document.getElementById('infoModal');
+            if (event.target === modal) closeModal();
+        }
+    </script>
+</body>
+</html>
